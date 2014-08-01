@@ -1,0 +1,36 @@
+Notes for PruECAP_Int 
+
+Hardware:
+========================================================================
+Beaglebone Black B
+Orange LED
+resistor
+
+Software:
+========================================================================
+Debian 7-16, bone60
+gcc
+
+Texas Instruments "am335x_pru_package-master"
+pasm (PRUSS assembler)
+
+Hardware connections:
+========================================================================
+LED and resistor in series.
+To GND on BBB
+To P9.31 of BBB
+
+Devicetree:
+========================================================================
+prujts1-00A0.dts - enables the PRUSS and configures P9.31 (offset 0x190) for PRU output.
+
+Program
+
+iec.c -  Starts the PRUSS & exits.
+
+
+iec.p -  Initializes the PRUSS INTC interrupt system. Initializes the PRU eCAP counter,CAP1 with interrupt on CAP1 match and  on CAP2 match. Toggles P9.31.  CAP1 match puts high value to the pin and resets the counter.  CAP2 match puts low value to the pin.  The values set means CAP1 interrupts every 1 seconds, and CAP2 interrupts .5 seconds after the counter is reset. Each loop is:  wait for interrrupt, if CAP2, clear the value and wait for interrupt, if CAP1, set the value and reset the counter and wait for interrupt.
+
+
+The PRU program initializes the PRU INTC system and  initializes  the IEP interrupt.
+
